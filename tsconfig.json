@@ -16,5 +16,5 @@
     "noUncheckedIndexedAccess": true /* Add 'undefined' to a type when accessed using an index. */,
     "noImplicitOverride": true /* Ensure overriding members in derived classes are marked with an override modifier. */
   },
-  "include": ["tests/**/*.test.ts", "src/**/*.ts"]
+  "include": ["tests/**/*.test.ts", "src/**/*.ts", "examples/**/*.ts"]
 }
