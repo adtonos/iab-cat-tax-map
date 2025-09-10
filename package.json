@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json.schemastore.org/package",
+  "name": "@adtonos/iab-cat-tax-map",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "tsx --test",
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "prepare": "husky",
+    "prepublish": "npm run test && npm run build"
+  },
+  "author": "AdTonos",
+  "license": "MIT",
+  "description": "",
+  "devDependencies": {
+    "@types/node": "^24.3.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.5",
+    "prettier": "^3.6.2",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2"
+  },
+  "lint-staged": {
+    "*.{js,ts,json,md}": "prettier --write",
+    "**/*.{js,ts,json,md}": "prettier --write"
+  },
+  "volta": {
+    "node": "24.6.0"
+  }
+}
