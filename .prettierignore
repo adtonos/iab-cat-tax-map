@@ -1,0 +1,5 @@
+package-lock.json
+README.md
+*.html
+holyAnonimizer.js
+node_modules
