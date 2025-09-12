@@ -1,14 +1,14 @@
 import { describe, it } from 'node:test';
 import { CategoryTaxonomies, CategoryTaxonomy } from '../src/types';
-import { mapCategories } from '../src/map-categories';
+import { mapCategory } from '../src/map-category';
 import assert from 'node:assert/strict';
 
-describe('mapCategories', () => {
+describe('mapCategory', () => {
   it('should cover all possible taxonomy combination', () => {
     for (const taxFrom of Object.values(CategoryTaxonomies)) {
       for (const taxTo of Object.values(CategoryTaxonomies)) {
         // if mapper is not defined it will throw
-        mapCategories('foo', taxFrom, taxTo);
+        mapCategory('foo', taxFrom, taxTo);
       }
     }
   });
@@ -80,7 +80,7 @@ describe('mapCategories', () => {
     ];
     for (const [inputString, inputTax, outputTax, expectedOutput] of inputs) {
       assert.strictEqual(
-        mapCategories(inputString, inputTax, outputTax),
+        mapCategory(inputString, inputTax, outputTax),
         expectedOutput,
         `Failed to convert from ${inputTax} to ${outputTax} category "${inputString}"`
       );
@@ -88,7 +88,7 @@ describe('mapCategories', () => {
   });
 
   it('unknown taxonomy results in runtime error', () => {
-    assert.throws(() => mapCategories('foo', 14 as CategoryTaxonomy, 2));
-    assert.throws(() => mapCategories('foo', 2, 14 as CategoryTaxonomy));
+    assert.throws(() => mapCategory('foo', 14 as CategoryTaxonomy, 2));
+    assert.throws(() => mapCategory('foo', 2, 14 as CategoryTaxonomy));
   });
 });
