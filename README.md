@@ -11,7 +11,7 @@ A comprehensive TypeScript library for working with Interactive Advertising Bure
 - [API Reference](#api-reference)
   - [detectTaxonomy](#detecttaxonomy)
   - [isValidTaxonomy](#isvalidtaxonomy)
-  - [mapCategories](#mapcategories)
+  - [mapCategory](#mapcategories)
 - [Architecture](#architecture)
 - [Mapping Strategy](#mapping-strategy)
 - [Usage Examples](#usage-examples)
@@ -49,7 +49,7 @@ pnpm add @adtonos/iab-cat-tax-map
 ## Quick Start
 
 ```typescript
-import { detectTaxonomy, isValidTaxonomy, mapCategories, CategoryTaxonomies } from '@adtonos/iab-cat-tax-map';
+import { detectTaxonomy, isValidTaxonomy, mapCategory, CategoryTaxonomies } from '@adtonos/iab-cat-tax-map';
 
 // Detect which taxonomies a category belongs to
 const taxonomies = detectTaxonomy('IAB1');
@@ -60,7 +60,7 @@ const isValid = isValidTaxonomy('IAB1-1', CategoryTaxonomies.CONTENT_V2);
 console.log(isValid); // false
 
 // Map a category from one taxonomy to another
-const mapped = mapCategories('IAB1-1', CategoryTaxonomies.CONTENT_V1, CategoryTaxonomies.CONTENT_V2);
+const mapped = mapCategory('IAB1-1', CategoryTaxonomies.CONTENT_V1, CategoryTaxonomies.CONTENT_V2);
 console.log(mapped); // '42'
 ```
 
@@ -126,12 +126,12 @@ const isValid = isValidTaxonomy('IAB1-1', CategoryTaxonomies.CONTENT_V3);
 // Returns: false because 'IAB1-1' does not exist in Content v3.0 taxonomy
 ```
 
-### mapCategories
+### mapCategory
 
 Maps a category from one taxonomy to another.
 
 ```typescript
-function mapCategories(
+function mapCategory(
   input: string,
   inputTax: CategoryTaxonomy,
   outputTax: CategoryTaxonomy
@@ -148,9 +148,9 @@ function mapCategories(
 
 **Example:**
 ```typescript
-const mapped = mapCategories('IAB1', CategoryTaxonomies.CONTENT_V1, CategoryTaxonomies.CONTENT_V2);
+const mapped = mapCategory('IAB1', CategoryTaxonomies.CONTENT_V1, CategoryTaxonomies.CONTENT_V2);
 // Returns: '42'
-const unappable = mapCategories('trash', CategoryTaxonomies.CONTENT_V1, CategoryTaxonomies.CONTENT_V2);
+const unappable = mapCategory('trash', CategoryTaxonomies.CONTENT_V1, CategoryTaxonomies.CONTENT_V2);
 // Returns: null
 ```
 
@@ -222,11 +222,11 @@ for (const taxonomy of possibleTaxonomies) {
 ### Cross-Taxonomy Category Mapping
 
 ```typescript
-import { mapCategories, CategoryTaxonomies } from '@adtonos/iab-cat-tax-map';
+import { mapCategory, CategoryTaxonomies } from '@adtonos/iab-cat-tax-map';
 
 // Map from Content v1.0 to Content v2.0
 const sourceCategory = 'IAB1-1';
-const mappedCategory = mapCategories(
+const mappedCategory = mapCategory(
   sourceCategory,
   CategoryTaxonomies.CONTENT_V1,
   CategoryTaxonomies.CONTENT_V2
@@ -242,7 +242,7 @@ if (mappedCategory) {
 ### Batch Category Processing
 
 ```typescript
-import { detectTaxonomy, mapCategories, CategoryTaxonomies } from '@adtonos/iab-cat-tax-map';
+import { detectTaxonomy, mapCategory, CategoryTaxonomies } from '@adtonos/iab-cat-tax-map';
 
 const categories = ['IAB1', 'IAB2-1', 'IAB12-3', 'IAB20'];
 
@@ -252,7 +252,7 @@ const processCategoryBatch = (categories: string[]) => {
 
     // Try to map to Content v3.0 if possible
     if (taxonomies.includes(CategoryTaxonomies.CONTENT_V1)) {
-      const mapped = mapCategories(
+      const mapped = mapCategory(
         category,
         CategoryTaxonomies.CONTENT_V1,
         CategoryTaxonomies.CONTENT_V3
@@ -280,14 +280,14 @@ console.log(results);
 ### Working with Ad Product Categories
 
 ```typescript
-import { mapCategories, isValidTaxonomy, CategoryTaxonomies } from '@adtonos/iab-cat-tax-map';
+import { mapCategory, isValidTaxonomy, CategoryTaxonomies } from '@adtonos/iab-cat-tax-map';
 
 const productCategory = 'IAB13-1';
 
 // Verify category exists in Ad Product v2.0
 if (isValidTaxonomy(productCategory, CategoryTaxonomies.AD_PRODUCT_V2)) {
   // Map to Content v1.0 for content targeting
-  const contentCategory = mapCategories(
+  const contentCategory = mapCategory(
     productCategory,
     CategoryTaxonomies.AD_PRODUCT_V2,
     CategoryTaxonomies.CONTENT_V1
@@ -308,7 +308,7 @@ That is why, one should handle non-happy paths of the functions:
 const taxonomies = detectTaxonomy('foo');
 console.log(taxonomies); // [] - no known taxonomy contains "foo" as valid category
 
-const mappedCategory = mapCategories('IAB24', CategoryTaxonomies.CONTENT_V1, CategoryTaxonomies.CONTENT_V2);
+const mappedCategory = mapCategory('IAB24', CategoryTaxonomies.CONTENT_V1, CategoryTaxonomies.CONTENT_V2);
 console.log(mappedCategory); // null - IAB24 is unmappable to Content Category v2.0
 ```
 
@@ -319,14 +319,14 @@ console.log(mappedCategory); // null - IAB24 is unmappable to Content Category v
 1. **Ad Product v1.0 Mappings**: Currently unmappable due to low-quality source data
    ```typescript
    // These mappings will always return null
-   const result = mapCategories('category', CategoryTaxonomies.AD_PRODUCT_V1, CategoryTaxonomies.CONTENT_V1);
+   const result = mapCategory('category', CategoryTaxonomies.AD_PRODUCT_V1, CategoryTaxonomies.CONTENT_V1);
    // Returns: null
    ```
 
 2. **Audience Category Isolation**: Audience categories cannot be mapped to/from other taxonomy types
    ```typescript
    // Audience categories are isolated
-   const result = mapCategories('audienceCategory', CategoryTaxonomies.AUDIENCE_V1_1, CategoryTaxonomies.CONTENT_V1);
+   const result = mapCategory('audienceCategory', CategoryTaxonomies.AUDIENCE_V1_1, CategoryTaxonomies.CONTENT_V1);
    // Returns: null
    ```
 

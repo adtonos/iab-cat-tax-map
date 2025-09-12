@@ -176,7 +176,7 @@ for (const tax of Object.values(CategoryTaxonomies)) {
   mappers[CategoryTaxonomies.AUDIENCE_V1_1].set(tax, unmappable);
 }
 
-export function mapCategories(input: string, inputTax: CategoryTaxonomy, outputTax: CategoryTaxonomy): string | null {
+export function mapCategory(input: string, inputTax: CategoryTaxonomy, outputTax: CategoryTaxonomy): string | null {
   if (inputTax === outputTax) {
     return input;
   }
