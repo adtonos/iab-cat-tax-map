@@ -1,0 +1,31 @@
+name: Run tests and check types
+
+on:
+  push:
+    branches:
+      - '**'
+
+jobs:
+  whole-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Install dependencies
+        run: |
+          npm ci --ignore-scripts
+        shell: bash
+
+      - name: Run typecheck
+        run: npm run typecheck
+
+      - name: Run unit tests
+        run: npm run test
