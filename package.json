@@ -1,11 +1,22 @@
 {
   "$schema": "https://json.schemastore.org/package",
   "name": "@adtonos/iab-cat-tax-map",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
     "dist"
+  ],
+  "keywords": [
+    "iab",
+    "taxonomy",
+    "category",
+    "content",
+    "categories",
+    "taxonomies",
+    "map",
+    "mapping",
+    "mapper"
   ],
   "scripts": {
     "test": "tsx --test",
