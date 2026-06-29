@@ -15,6 +15,7 @@ const mappers: Record<CategoryTaxonomy, Map<CategoryTaxonomy, TaxonomyMapper>> =
   7: new Map(),
   8: new Map(),
   9: new Map(),
+  10: new Map(),
 };
 
 const identityMapper: TaxonomyMapper = (input) => input;

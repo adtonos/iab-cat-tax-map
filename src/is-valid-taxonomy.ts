@@ -30,5 +30,7 @@ export function isValidTaxonomy(category: string, tax: CategoryTaxonomy): boolea
       return AudienceCategories11.has(category);
     case CategoryTaxonomies.CONTENT_V3_1:
       return ContentCategories31.has(category);
+    case CategoryTaxonomies.APPLE_V2:
+      return false; // @TODO
   }
 }
