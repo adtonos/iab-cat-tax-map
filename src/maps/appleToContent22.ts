@@ -117,6 +117,6 @@ const mapping: { [key: string]: number[] } = {
   'tv reviews': [640], // Television
 };
 
-export function translateApplePodcastToIabTaxonomy(category?: string): number[] {
-  return mapping[(category || '').toLocaleLowerCase()] || [];
+export function applePodcastToContent22(category: string): string {
+  return String((mapping[category.toLocaleLowerCase()] || []).at(-1) || '');
 }

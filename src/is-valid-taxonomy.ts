@@ -8,6 +8,7 @@ import { ContentCategories22 } from './sets/content-22';
 import { ContentCategories30 } from './sets/content-30';
 import { ContentCategories31 } from './sets/content-31';
 import { CategoryTaxonomies, CategoryTaxonomy } from './types';
+import { isAppleCategory } from './sets/apple-10';
 
 // @returns true if value is valid in given taxonomy
 export function isValidTaxonomy(category: string, tax: CategoryTaxonomy): boolean {
@@ -31,6 +32,6 @@ export function isValidTaxonomy(category: string, tax: CategoryTaxonomy): boolea
     case CategoryTaxonomies.CONTENT_V3_1:
       return ContentCategories31.has(category);
     case CategoryTaxonomies.APPLE_V1:
-      return false; // @TODO
+      return isAppleCategory(category);
   }
 }

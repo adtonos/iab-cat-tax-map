@@ -4,6 +4,8 @@ import { content10ToProduct20 } from './maps/content10ToProduct20';
 import { content20ToContent10 } from './maps/content20ToContent10';
 import { product20ToContent10 } from './maps/product20ToContent10';
 import { CategoryTaxonomies, CategoryTaxonomy, TaxonomyMapper } from './types';
+import { applePodcastToContent22 } from './maps/appleToContent22';
+import { ContentCategories20 } from './sets/content-20';
 
 const mappers: Record<CategoryTaxonomy, Map<CategoryTaxonomy, TaxonomyMapper>> = {
   1: new Map(),
@@ -81,6 +83,8 @@ Error while trying to add mapping of "${targetTax}" using "${baseTax}" as base:
 // Content 1<->2
 mappers[CategoryTaxonomies.CONTENT_V1].set(CategoryTaxonomies.CONTENT_V2, content10ToContent20);
 mappers[CategoryTaxonomies.CONTENT_V2].set(CategoryTaxonomies.CONTENT_V1, content20ToContent10);
+// Apple Podcast <-> V2.2
+mappers[CategoryTaxonomies.APPLE_V1].set(CategoryTaxonomies.CONTENT_V2_2, applePodcastToContent22);
 
 // Base every other content category on their relation to 2.0
 addNewTaxonomyBasedOnOldMappings(

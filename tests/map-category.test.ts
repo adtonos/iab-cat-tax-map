@@ -5,12 +5,18 @@ import assert from 'node:assert/strict';
 
 describe('mapCategory', () => {
   it('should cover all possible taxonomy combination', () => {
-    for (const taxFrom of Object.values(CategoryTaxonomies)) {
-      for (const taxTo of Object.values(CategoryTaxonomies)) {
+    // @TODO this might need rework at one point
+    // lets ignore mapping to apple from different stuff than v1
+    // cause we dont need that for now as we always use only v2.2
+    // as input
+    for (const taxFrom of Object.values(CategoryTaxonomies).filter((x) => x !== CategoryTaxonomies.APPLE_V1)) {
+      for (const taxTo of Object.values(CategoryTaxonomies).filter((x) => x !== CategoryTaxonomies.APPLE_V1)) {
         // if mapper is not defined it will throw
         mapCategory('foo', taxFrom, taxTo);
       }
     }
+
+    mapCategory('foo', CategoryTaxonomies.APPLE_V1, CategoryTaxonomies.CONTENT_V2_2);
   });
 
   it('should map between taxonomies if possible', () => {
