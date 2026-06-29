@@ -40,7 +40,7 @@ describe('detectTaxonomy', () => {
       const taxonomies = detectTaxonomy('Comedy');
       assert.ok(Array.isArray(taxonomies), 'Should return an array');
 
-      const isValidTaxonomy = taxonomies.some((tax) => tax === CategoryTaxonomies.APPLE_V2);
+      const isValidTaxonomy = taxonomies.some((tax) => tax === CategoryTaxonomies.APPLE_V1);
 
       assert.ok(isValidTaxonomy);
 

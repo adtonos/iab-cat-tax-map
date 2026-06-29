@@ -8,7 +8,7 @@ export const CategoryTaxonomies = {
   CONTENT_V3: 7,
   AD_PRODUCT_V2: 8,
   CONTENT_V3_1: 9,
-  APPLE_V2: 10,
+  APPLE_V1: 10,
 } as const;
 export type CategoryTaxonomy = (typeof CategoryTaxonomies)[keyof typeof CategoryTaxonomies];
 
