@@ -17,5 +17,5 @@ export interface PseudoSet<K> {
   has(key: K): boolean;
 }
 
-// @returns null when input does not map to the taxonomy
-export type TaxonomyMapper = (input: string) => string | null;
+// @returns array of categories the input maps to in the target taxonomy
+export type TaxonomyMapper = (input: string) => string[];

@@ -1,3 +1,5 @@
+import { TaxonomyMapper } from '../types';
+
 // This mapping is trying to map Apple podcast categories
 // (https://podcasters.apple.com/support/1691-apple-podcasts-categories)
 // to IAB Content Taxonomy v2.2
@@ -117,6 +119,6 @@ export const appleToContent22mapping: { [key: string]: number[] } = {
   'tv reviews': [640], // Television
 };
 
-export function applePodcastToContent22(category: string): string {
-  return String((appleToContent22mapping[category.toLowerCase()] || []).at(-1) || '');
-}
+export const applePodcastToContent22: TaxonomyMapper = (category: string) => {
+  return (appleToContent22mapping[category.toLowerCase()] || []).map(String);
+};

@@ -424,4 +424,7 @@ const product10ToProduct20Map = new Map<string, string>([
   ['841', '1548'],
 ]);
 
-export const product10ToProduct20: TaxonomyMapper = (input) => product10ToProduct20Map.get(input) ?? null;
+export const product10ToProduct20: TaxonomyMapper = (input) => {
+  const mapped = product10ToProduct20Map.get(input);
+  return mapped ? [mapped] : [];
+};

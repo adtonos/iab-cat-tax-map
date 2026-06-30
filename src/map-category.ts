@@ -20,8 +20,8 @@ const mappers: Record<CategoryTaxonomy, Map<CategoryTaxonomy, TaxonomyMapper>> =
   10: new Map(),
 };
 
-const identityMapper: TaxonomyMapper = (input) => input;
-const unmappable: TaxonomyMapper = (_input) => null;
+const identityMapper: TaxonomyMapper = (input) => [input];
+const unmappable: TaxonomyMapper = (_input) => [];
 
 const addNewTaxonomyBasedOnOldMappings = (
   targetTax: CategoryTaxonomy,
@@ -54,18 +54,12 @@ Error while trying to add mapping of "${targetTax}" using "${baseTax}" as base:
 `
         );
       }
-      const base = existingToBase(existing);
-      if (base == null) {
-        return null;
-      }
-      return baseToTarget(base);
+      const bases = existingToBase(existing);
+      return bases.flatMap((base) => baseToTarget(base));
     });
 
     mappers[targetTax].set(existingTax, (target) => {
-      const base = targetToBase(target);
-      if (base == null) {
-        return null;
-      }
+      const bases = targetToBase(target);
       const baseToExisting = mappers[baseTax].get(existingTax);
       if (!baseToExisting) {
         throw new Error(
@@ -75,7 +69,7 @@ Error while trying to add mapping of "${targetTax}" using "${baseTax}" as base:
 `
         );
       }
-      return baseToExisting(base);
+      return bases.flatMap((base) => baseToExisting(base));
     });
   }
 };
@@ -113,15 +107,15 @@ addNewTaxonomyBasedOnOldMappings(
   // NOTE: IAB randomly removed and added some ids, unique ids remained the same...
   (v3) => {
     if (isValidTaxonomy(v3, CategoryTaxonomies.CONTENT_V2)) {
-      return v3;
+      return [v3];
     }
-    return null;
+    return [];
   },
   (v2) => {
     if (isValidTaxonomy(v2, CategoryTaxonomies.CONTENT_V3)) {
-      return v2;
+      return [v2];
     }
-    return null;
+    return [];
   }
 );
 addNewTaxonomyBasedOnOldMappings(
@@ -137,9 +131,9 @@ addNewTaxonomyBasedOnOldMappings(
   (v3_1) => {
     // NOTE: the only difference is in "thriller" genre, which has id 700
     if (v3_1 === '700') {
-      return null;
+      return [];
     }
-    return v3_1;
+    return [v3_1];
   },
   identityMapper
 );
@@ -181,9 +175,9 @@ for (const tax of Object.values(CategoryTaxonomies)) {
   mappers[CategoryTaxonomies.AUDIENCE_V1_1].set(tax, unmappable);
 }
 
-export function mapCategory(input: string, inputTax: CategoryTaxonomy, outputTax: CategoryTaxonomy): string | null {
+export function mapCategory(input: string, inputTax: CategoryTaxonomy, outputTax: CategoryTaxonomy): string[] {
   if (inputTax === outputTax) {
-    return input;
+    return [input];
   }
   const mapper = mappers[inputTax].get(outputTax);
   if (!mapper) {
