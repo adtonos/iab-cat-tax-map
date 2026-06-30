@@ -4,7 +4,7 @@
 // (https://github.com/InteractiveAdvertisingBureau/Taxonomies/blob/main/Content%20Taxonomies/Content%20Taxonomy%202.2.tsv)
 // Mapping prepared by AI with human review
 
-const mapping: { [key: string]: number[] } = {
+export const appleToContent22mapping: { [key: string]: number[] } = {
   arts: [201], // Fine Art
   books: [42], // Books and Literature
   design: [201, 204], // Fine Art > Design
@@ -118,5 +118,5 @@ const mapping: { [key: string]: number[] } = {
 };
 
 export function applePodcastToContent22(category: string): string {
-  return String((mapping[category.toLocaleLowerCase()] || []).at(-1) || '');
+  return String((appleToContent22mapping[category.toLowerCase()] || []).at(-1) || '');
 }
