@@ -77,6 +77,7 @@ Error while trying to add mapping of "${targetTax}" using "${baseTax}" as base:
 // Content 1<->2
 mappers[CategoryTaxonomies.CONTENT_V1].set(CategoryTaxonomies.CONTENT_V2, content10ToContent20);
 mappers[CategoryTaxonomies.CONTENT_V2].set(CategoryTaxonomies.CONTENT_V1, content20ToContent10);
+
 // Apple Podcast <-> V2.2
 mappers[CategoryTaxonomies.APPLE_V1].set(CategoryTaxonomies.CONTENT_V2_2, applePodcastToContent22);
 
@@ -96,6 +97,18 @@ addNewTaxonomyBasedOnOldMappings(
   identityMapper
 );
 addNewTaxonomyBasedOnOldMappings(
+  CategoryTaxonomies.APPLE_V1,
+  CategoryTaxonomies.CONTENT_V2_2,
+  [
+    CategoryTaxonomies.CONTENT_V1,
+    CategoryTaxonomies.CONTENT_V2,
+    CategoryTaxonomies.CONTENT_V2_1,
+    CategoryTaxonomies.CONTENT_V2_2,
+  ],
+  applePodcastToContent22,
+  unmappable
+);
+addNewTaxonomyBasedOnOldMappings(
   CategoryTaxonomies.CONTENT_V3,
   CategoryTaxonomies.CONTENT_V2,
   [
@@ -103,6 +116,7 @@ addNewTaxonomyBasedOnOldMappings(
     CategoryTaxonomies.CONTENT_V2,
     CategoryTaxonomies.CONTENT_V2_1,
     CategoryTaxonomies.CONTENT_V2_2,
+    CategoryTaxonomies.APPLE_V1,
   ],
   // NOTE: IAB randomly removed and added some ids, unique ids remained the same...
   (v3) => {
@@ -126,6 +140,7 @@ addNewTaxonomyBasedOnOldMappings(
     CategoryTaxonomies.CONTENT_V2,
     CategoryTaxonomies.CONTENT_V2_1,
     CategoryTaxonomies.CONTENT_V2_2,
+    CategoryTaxonomies.APPLE_V1,
     CategoryTaxonomies.CONTENT_V3,
   ],
   (v3_1) => {
@@ -145,6 +160,7 @@ addNewTaxonomyBasedOnOldMappings(
     CategoryTaxonomies.CONTENT_V2,
     CategoryTaxonomies.CONTENT_V2_1,
     CategoryTaxonomies.CONTENT_V2_2,
+    CategoryTaxonomies.APPLE_V1,
     CategoryTaxonomies.CONTENT_V3,
     CategoryTaxonomies.CONTENT_V3_1,
   ],

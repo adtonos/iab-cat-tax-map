@@ -9,7 +9,7 @@ describe('mapCategory', () => {
     // lets ignore mapping to apple from different stuff than v1
     // cause we dont need that for now as we always use only v2.2
     // as input
-    for (const taxFrom of Object.values(CategoryTaxonomies).filter((x) => x !== CategoryTaxonomies.APPLE_V1)) {
+    for (const taxFrom of Object.values(CategoryTaxonomies)) {
       for (const taxTo of Object.values(CategoryTaxonomies).filter((x) => x !== CategoryTaxonomies.APPLE_V1)) {
         // if mapper is not defined it will throw
         mapCategory('foo', taxFrom, taxTo);
@@ -21,6 +21,7 @@ describe('mapCategory', () => {
 
   it('should map between taxonomies if possible', () => {
     const inputs: [string, CategoryTaxonomy, CategoryTaxonomy, string[]][] = [
+      ['arts', CategoryTaxonomies.APPLE_V1, CategoryTaxonomies.CONTENT_V3, ['201']], // Arts -> Fine Art
       ['1', CategoryTaxonomies.CONTENT_V2, CategoryTaxonomies.CONTENT_V1, ['IAB2']], // Automotive -> Automotive
       ['32', CategoryTaxonomies.CONTENT_V2, CategoryTaxonomies.CONTENT_V1, ['IAB2-1']], // Auto Parts -> Auto Parts
       ['42', CategoryTaxonomies.CONTENT_V2, CategoryTaxonomies.CONTENT_V1, ['IAB1-1']], // Books and Literature -> Books & Literature
