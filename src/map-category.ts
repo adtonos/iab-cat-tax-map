@@ -23,6 +23,20 @@ const mappers: Record<CategoryTaxonomy, Map<CategoryTaxonomy, TaxonomyMapper>> =
 const identityMapper: TaxonomyMapper = (input) => [input];
 const unmappable: TaxonomyMapper = (_input) => [];
 
+/**
+ * Adds a new taxonomy to the mapping network and automatically derives its relationship
+ * with already registered taxonomies using a base taxonomy as a bridge.
+ *
+ * It establishes direct mapping between targetTax and baseTax, then for every
+ * taxonomy in alreadyAddedTaxonomies, it creates transitive mappings by chaining
+ * through baseTax.
+ *
+ * @param targetTax The new taxonomy to add.
+ * @param baseTax An existing taxonomy that targetTax is directly related to.
+ * @param alreadyAddedTaxonomies List of taxonomies that are already interconnected in the network.
+ * @param targetToBase Mapper from target taxonomy to base taxonomy.
+ * @param baseToTarget Mapper from base taxonomy to target taxonomy.
+ */
 const addNewTaxonomyBasedOnOldMappings = (
   targetTax: CategoryTaxonomy,
   baseTax: CategoryTaxonomy,
