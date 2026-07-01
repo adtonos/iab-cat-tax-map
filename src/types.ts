@@ -1,3 +1,4 @@
+// https://github.com/InteractiveAdvertisingBureau/openrtb/blob/main/extensions/community_extensions/segtax.md
 export const CategoryTaxonomies = {
   CONTENT_V1: 1,
   CONTENT_V2: 2,
@@ -8,7 +9,7 @@ export const CategoryTaxonomies = {
   CONTENT_V3: 7,
   AD_PRODUCT_V2: 8,
   CONTENT_V3_1: 9,
-  APPLE_V1: 10,
+  APPLE_V1: 713,
 } as const;
 export type CategoryTaxonomy = (typeof CategoryTaxonomies)[keyof typeof CategoryTaxonomies];
 
