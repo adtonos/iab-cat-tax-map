@@ -4,6 +4,8 @@ import { content10ToProduct20 } from './maps/content10ToProduct20';
 import { content20ToContent10 } from './maps/content20ToContent10';
 import { product20ToContent10 } from './maps/product20ToContent10';
 import { CategoryTaxonomies, CategoryTaxonomy, TaxonomyMapper } from './types';
+import { applePodcastToContent22 } from './maps/appleToContent22';
+import { ContentCategories20 } from './sets/content-20';
 
 const mappers: Record<CategoryTaxonomy, Map<CategoryTaxonomy, TaxonomyMapper>> = {
   1: new Map(),
@@ -15,11 +17,26 @@ const mappers: Record<CategoryTaxonomy, Map<CategoryTaxonomy, TaxonomyMapper>> =
   7: new Map(),
   8: new Map(),
   9: new Map(),
+  713: new Map(),
 };
 
-const identityMapper: TaxonomyMapper = (input) => input;
-const unmappable: TaxonomyMapper = (_input) => null;
+const identityMapper: TaxonomyMapper = (input) => [input];
+const unmappable: TaxonomyMapper = (_input) => [];
 
+/**
+ * Adds a new taxonomy to the mapping network and automatically derives its relationship
+ * with already registered taxonomies using a base taxonomy as a bridge.
+ *
+ * It establishes direct mapping between targetTax and baseTax, then for every
+ * taxonomy in alreadyAddedTaxonomies, it creates transitive mappings by chaining
+ * through baseTax.
+ *
+ * @param targetTax The new taxonomy to add.
+ * @param baseTax An existing taxonomy that targetTax is directly related to.
+ * @param alreadyAddedTaxonomies List of taxonomies that are already interconnected in the network.
+ * @param targetToBase Mapper from target taxonomy to base taxonomy.
+ * @param baseToTarget Mapper from base taxonomy to target taxonomy.
+ */
 const addNewTaxonomyBasedOnOldMappings = (
   targetTax: CategoryTaxonomy,
   baseTax: CategoryTaxonomy,
@@ -51,18 +68,12 @@ Error while trying to add mapping of "${targetTax}" using "${baseTax}" as base:
 `
         );
       }
-      const base = existingToBase(existing);
-      if (base == null) {
-        return null;
-      }
-      return baseToTarget(base);
+      const bases = existingToBase(existing);
+      return bases.flatMap((base) => baseToTarget(base));
     });
 
     mappers[targetTax].set(existingTax, (target) => {
-      const base = targetToBase(target);
-      if (base == null) {
-        return null;
-      }
+      const bases = targetToBase(target);
       const baseToExisting = mappers[baseTax].get(existingTax);
       if (!baseToExisting) {
         throw new Error(
@@ -72,7 +83,7 @@ Error while trying to add mapping of "${targetTax}" using "${baseTax}" as base:
 `
         );
       }
-      return baseToExisting(base);
+      return bases.flatMap((base) => baseToExisting(base));
     });
   }
 };
@@ -80,6 +91,9 @@ Error while trying to add mapping of "${targetTax}" using "${baseTax}" as base:
 // Content 1<->2
 mappers[CategoryTaxonomies.CONTENT_V1].set(CategoryTaxonomies.CONTENT_V2, content10ToContent20);
 mappers[CategoryTaxonomies.CONTENT_V2].set(CategoryTaxonomies.CONTENT_V1, content20ToContent10);
+
+// Apple Podcast <-> V2.2
+mappers[CategoryTaxonomies.APPLE_V1].set(CategoryTaxonomies.CONTENT_V2_2, applePodcastToContent22);
 
 // Base every other content category on their relation to 2.0
 addNewTaxonomyBasedOnOldMappings(
@@ -97,6 +111,18 @@ addNewTaxonomyBasedOnOldMappings(
   identityMapper
 );
 addNewTaxonomyBasedOnOldMappings(
+  CategoryTaxonomies.APPLE_V1,
+  CategoryTaxonomies.CONTENT_V2_2,
+  [
+    CategoryTaxonomies.CONTENT_V1,
+    CategoryTaxonomies.CONTENT_V2,
+    CategoryTaxonomies.CONTENT_V2_1,
+    CategoryTaxonomies.CONTENT_V2_2,
+  ],
+  applePodcastToContent22,
+  unmappable
+);
+addNewTaxonomyBasedOnOldMappings(
   CategoryTaxonomies.CONTENT_V3,
   CategoryTaxonomies.CONTENT_V2,
   [
@@ -104,19 +130,20 @@ addNewTaxonomyBasedOnOldMappings(
     CategoryTaxonomies.CONTENT_V2,
     CategoryTaxonomies.CONTENT_V2_1,
     CategoryTaxonomies.CONTENT_V2_2,
+    CategoryTaxonomies.APPLE_V1,
   ],
   // NOTE: IAB randomly removed and added some ids, unique ids remained the same...
   (v3) => {
     if (isValidTaxonomy(v3, CategoryTaxonomies.CONTENT_V2)) {
-      return v3;
+      return [v3];
     }
-    return null;
+    return [];
   },
   (v2) => {
     if (isValidTaxonomy(v2, CategoryTaxonomies.CONTENT_V3)) {
-      return v2;
+      return [v2];
     }
-    return null;
+    return [];
   }
 );
 addNewTaxonomyBasedOnOldMappings(
@@ -127,14 +154,15 @@ addNewTaxonomyBasedOnOldMappings(
     CategoryTaxonomies.CONTENT_V2,
     CategoryTaxonomies.CONTENT_V2_1,
     CategoryTaxonomies.CONTENT_V2_2,
+    CategoryTaxonomies.APPLE_V1,
     CategoryTaxonomies.CONTENT_V3,
   ],
   (v3_1) => {
     // NOTE: the only difference is in "thriller" genre, which has id 700
     if (v3_1 === '700') {
-      return null;
+      return [];
     }
-    return v3_1;
+    return [v3_1];
   },
   identityMapper
 );
@@ -146,6 +174,7 @@ addNewTaxonomyBasedOnOldMappings(
     CategoryTaxonomies.CONTENT_V2,
     CategoryTaxonomies.CONTENT_V2_1,
     CategoryTaxonomies.CONTENT_V2_2,
+    CategoryTaxonomies.APPLE_V1,
     CategoryTaxonomies.CONTENT_V3,
     CategoryTaxonomies.CONTENT_V3_1,
   ],
@@ -176,9 +205,9 @@ for (const tax of Object.values(CategoryTaxonomies)) {
   mappers[CategoryTaxonomies.AUDIENCE_V1_1].set(tax, unmappable);
 }
 
-export function mapCategory(input: string, inputTax: CategoryTaxonomy, outputTax: CategoryTaxonomy): string | null {
+export function mapCategory(input: string, inputTax: CategoryTaxonomy, outputTax: CategoryTaxonomy): string[] {
   if (inputTax === outputTax) {
-    return input;
+    return [input];
   }
   const mapper = mappers[inputTax].get(outputTax);
   if (!mapper) {

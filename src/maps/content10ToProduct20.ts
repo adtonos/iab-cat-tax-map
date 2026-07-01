@@ -395,4 +395,7 @@ const content10ToProduct20Map = new Map<string, string>([
   ['IAB26-4', '1000'],
 ]);
 
-export const content10ToProduct20: TaxonomyMapper = (input) => content10ToProduct20Map.get(input) ?? null;
+export const content10ToProduct20: TaxonomyMapper = (input) => {
+  const mapped = content10ToProduct20Map.get(input);
+  return mapped ? [mapped] : [];
+};

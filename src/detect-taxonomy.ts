@@ -8,6 +8,7 @@ import { ContentCategories22 } from './sets/content-22';
 import { ContentCategories30 } from './sets/content-30';
 import { ContentCategories31 } from './sets/content-31';
 import { CategoryTaxonomies, CategoryTaxonomy } from './types';
+import { AppleCategories, isAppleCategory } from './sets/apple-10';
 
 export function detectTaxonomy(category: string): CategoryTaxonomy[] {
   const possibleTaxonomies: CategoryTaxonomy[] = [];
@@ -37,6 +38,9 @@ export function detectTaxonomy(category: string): CategoryTaxonomy[] {
   }
   if (AdCategories20.has(category)) {
     possibleTaxonomies.push(CategoryTaxonomies.AD_PRODUCT_V2);
+  }
+  if (isAppleCategory(category)) {
+    possibleTaxonomies.push(CategoryTaxonomies.APPLE_V1);
   }
   return possibleTaxonomies;
 }

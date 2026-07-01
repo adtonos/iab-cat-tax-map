@@ -1,3 +1,4 @@
+// https://github.com/InteractiveAdvertisingBureau/openrtb/blob/main/extensions/community_extensions/segtax.md
 export const CategoryTaxonomies = {
   CONTENT_V1: 1,
   CONTENT_V2: 2,
@@ -8,6 +9,7 @@ export const CategoryTaxonomies = {
   CONTENT_V3: 7,
   AD_PRODUCT_V2: 8,
   CONTENT_V3_1: 9,
+  APPLE_V1: 713,
 } as const;
 export type CategoryTaxonomy = (typeof CategoryTaxonomies)[keyof typeof CategoryTaxonomies];
 
@@ -16,5 +18,5 @@ export interface PseudoSet<K> {
   has(key: K): boolean;
 }
 
-// @returns null when input does not map to the taxonomy
-export type TaxonomyMapper = (input: string) => string | null;
+// @returns array of categories the input maps to in the target taxonomy
+export type TaxonomyMapper = (input: string) => string[];

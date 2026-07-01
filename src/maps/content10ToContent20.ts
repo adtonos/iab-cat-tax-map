@@ -400,5 +400,6 @@ const content10ToContent20Map = new Map<string, string>([
 ]);
 
 export const content10ToContent20: TaxonomyMapper = (input: string) => {
-  return content10ToContent20Map.get(input) ?? null;
+  const mapped = content10ToContent20Map.get(input);
+  return mapped ? [mapped] : [];
 };

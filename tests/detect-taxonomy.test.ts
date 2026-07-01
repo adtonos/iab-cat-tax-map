@@ -36,6 +36,26 @@ describe('detectTaxonomy', () => {
       assert.ok(hasAudience);
     });
 
+    test('should detect apple categories', () => {
+      const taxonomies = detectTaxonomy('Comedy');
+      assert.ok(Array.isArray(taxonomies), 'Should return an array');
+
+      const isValidTaxonomy = taxonomies.some((tax) => tax === CategoryTaxonomies.APPLE_V1);
+
+      assert.ok(isValidTaxonomy);
+
+      assert.ok(taxonomies.length > 0, 'Should detect at least one taxonomy');
+    });
+  });
+  describe('Single taxonomy categories', () => {
+    test('should detect audience-specific categories', () => {
+      const taxonomies = detectTaxonomy('1679');
+      assert.ok(taxonomies.length > 0);
+      // If this category exists, it should only be in audience taxonomy
+      const hasAudience = taxonomies.includes(CategoryTaxonomies.AUDIENCE_V1_1);
+      assert.ok(hasAudience);
+    });
+
     test('should detect ad product specific categories', () => {
       const taxonomies = detectTaxonomy('190');
       assert.ok(Array.isArray(taxonomies), 'Should return an array');
